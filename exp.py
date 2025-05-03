@@ -14,7 +14,7 @@ def filter_expenses_by_category(expenses, category):
     return [expense for expense in expenses if expense['category'] == category]
 
 # Streamlit App
-st.title("Simple Expense Tracker")
+st.title(" Nebil's Tracker")
 
 # Store expenses in session state
 if 'expenses' not in st.session_state:
@@ -24,6 +24,8 @@ if 'expenses' not in st.session_state:
 with st.form("expense_form"):
     amount = st.number_input("Amount", min_value=0.0)  # Removed format="%.2f"
     category = st.text_input("Category")
+    date = st.date_input("date")
+    budget = st.number_input("budget", min_value =0.0)
     submitted = st.form_submit_button("Add Expense")
     if submitted:
         if category.strip():
@@ -42,6 +44,16 @@ else:
 # Show total
 st.subheader("Total Spent")
 st.write(f"${total_expenses(st.session_state.expenses)}")
+
+st.subheader("budget section")
+if budget >0:
+    remaining = budget-amount
+    if remaining >=0:
+        st.success(f"You are within budget. Remaining: ${remaining}")
+    else: 
+        st.error(f"You exceeded the budget by ${abs(remaining)}")
+else:
+    st.info("no budget entered yet")
 
 # Filter by category
 st.subheader("Filter by Category")
